@@ -11,6 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class UserDetails extends User {
@@ -20,16 +23,39 @@ public class UserDetails extends User {
 	private String last_Name;
 	@Embedded
 	private Address addr;
+	
 	@ElementCollection(fetch = FetchType.LAZY)
 	@JoinTable(name = "Phone", joinColumns = @JoinColumn(name = "User_ID"))
-	@Column(name="Phone_Number")
+	@Column(name="Phone_Number")//WIll create a new table with userdetails having no reference but phone table having User id
 	private List<Long> ph_no;
+	
 	@Column(name="Gender")
 	private char gender;
 	@Column(name="Marital_Status")
 	private boolean maritalStatus;
 	@Column(name="DOB")
 	private Date birthDate;
+	
+	@OneToOne
+	@JoinColumn(name="Vehicle_ID")
+	private Vehicle trans;//one entity inside other -Userdetails have a foreign key to Table vehicle
+	
+	@OneToMany
+	//TO change COlumn name in the new table created userdetails_laptop having the mapping
+	@JoinTable(name="O2M_USER_LAPTOP",joinColumns=@JoinColumn(name="User_ID"),
+	inverseJoinColumns=@JoinColumn(name="Laptop_ID"))
+	private List<Laptop> lapi=new ArrayList<Laptop>();//We will have a 
+	
+	@ManyToMany
+	private List<Roles> rol=new ArrayList<>();
+	
+	public Vehicle getTrans() {
+		return trans;
+	}
+
+	public void setTrans(Vehicle trans) {
+		this.trans = trans;
+	}
 
 	public UserDetails() {
 		ph_no = new ArrayList<Long>();
@@ -75,6 +101,14 @@ public class UserDetails extends User {
 		this.gender = gender;
 	}
 
+	public List<Roles> getRol() {
+		return rol;
+	}
+
+	public void setRol(List<Roles> rol) {
+		this.rol = rol;
+	}
+
 	public boolean isMaritalStatus() {
 		return maritalStatus;
 	}
@@ -89,5 +123,13 @@ public class UserDetails extends User {
 
 	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
+	}
+
+	public List<Laptop> getLapi() {
+		return lapi;
+	}
+
+	public void setLapi(List<Laptop> lapi) {
+		this.lapi = lapi;
 	}
 }

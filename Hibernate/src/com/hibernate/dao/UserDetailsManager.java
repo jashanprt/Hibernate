@@ -13,8 +13,11 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.hibernate.entity.Address;
+import com.hibernate.entity.Laptop;
+import com.hibernate.entity.Roles;
 import com.hibernate.entity.User;
 import com.hibernate.entity.UserDetails;
+import com.hibernate.entity.Vehicle;
 
 public class UserDetailsManager {
 
@@ -46,8 +49,36 @@ public class UserDetailsManager {
 		a.setTown("GNN");
 		u.setAddr(a);
 		
+		Vehicle v=new Vehicle();
+		v.setName("Muscle");
+		u.setTrans(v);
+		
+		Laptop l1=new Laptop();
+		l1.setCompanyName("DELL");
+		Laptop l2=new Laptop();
+		l2.setCompanyName("HP");
+		u.getLapi().add(l1);
+		u.getLapi().add(l2);
+		
+		Roles r=new Roles();
+		r.setRoleName("Admin");
+		r.getAccessApps().add("Portal");
+		r.getAccessApps().add("Mosa");
+		r.getAccessApps().add("Tibco");
+		r.getAccessApps().add("Desktop");
+		r.getUl().add(u);
+		
+		Roles r1=new Roles();
+		r1.setRoleName("Users");
+		r1.getAccessApps().add("Desktop");
+		r1.getUl().add(u);
+		
+		u.getRol().add(r1);
+		u.getRol().add(r);
+		
+		
 		UserDetailsManager um = new UserDetailsManager();
-		um.add(u);
+		um.add(u,v,l1,l2,r,r1);
 		//um.getAllEntry();
 	//	um.updateEntry(u, 1);
 	//	um.getAllEntry();
@@ -56,11 +87,16 @@ public class UserDetailsManager {
 
 	}
 
-	public void add(UserDetails u) {
+	public void add(UserDetails u,Vehicle v,Laptop l1,Laptop l2,Roles r,Roles r1) {
 		Session s = sf.openSession();
 		Transaction tx = s.beginTransaction();
 		try {
 			s.persist(u);
+			s.persist(v);
+			s.persist(l1);
+			s.persist(l2);
+			s.persist(r);
+			s.persist(r1);
 			tx.commit();
 		} catch (Exception ex) {
 			ex.printStackTrace();

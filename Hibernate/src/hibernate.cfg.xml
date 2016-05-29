@@ -30,5 +30,8 @@
   <!--   <mapping resource="org/hibernate/tutorial/domain/Event.hbm.xml"/> -->
   <mapping class="com.hibernate.entity.User"/>
   <mapping class="com.hibernate.entity.UserDetails"/>
+  <mapping class="com.hibernate.entity.Vehicle"/>
+   <mapping class="com.hibernate.entity.Laptop"/>
+   <mapping class="com.hibernate.entity.Roles"/>
   </session-factory>
 </hibernate-configuration>
